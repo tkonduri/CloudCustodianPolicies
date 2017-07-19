@@ -1,0 +1,10 @@
+policies:
+  - name: ec2-stop-tagged-instance
+    resource: ec2
+    comment: |
+      Find all running EC2 instances that are using invalid AMIs and stop them
+    filters:
+      - "State.Name": running
+      - "tag:Custodian": present
+    actions:
+      - stop

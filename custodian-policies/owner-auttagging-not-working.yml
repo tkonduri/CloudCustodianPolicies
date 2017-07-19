@@ -1,0 +1,16 @@
+policies:
+  - name: tagging-owner
+    resource: ec2
+    mode:
+        role: arn:aws:iam::524564751780:role/naman-role
+        type: ec2-instance-state
+        events:
+          - pending
+          - running
+          - shutting-down
+          - stopping
+    filters:
+      - "tag:owner": absent
+    actions:
+      - type: auto-tag-user
+        tag: owner 

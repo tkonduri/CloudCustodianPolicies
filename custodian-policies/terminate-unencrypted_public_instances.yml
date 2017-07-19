@@ -1,0 +1,19 @@
+policies:
+  - name: terminate-unencrypted-ec2-instances
+    description: |
+      Terminate all unencrypted instances upon creation.
+    resource: ec2
+    mode:
+      role: arn:aws:iam::524564751780:role/TejaswiRole
+      type: cloudtrail
+      events:
+        - RunInstances
+    filters:
+      - type: ebs
+        key: Encrypted
+        value: false
+    actions:
+      - terminate
+      - type: tag
+        key: custodian_voume_encryption_check
+        value: "surf-custodian: Instance terminated since the volume is unencrypted"

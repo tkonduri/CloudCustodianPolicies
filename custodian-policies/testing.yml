@@ -1,0 +1,19 @@
+policies:
+  - name: owner-autotagging-on_instance_creation_with_email
+    resource: ec2
+    mode:
+        role: arn:aws:iam::524564751780:role/TejaswiRole
+        type: cloudtrail
+        events:
+          - RunInstances
+    filters:
+      - tag:owner: absent
+    actions:
+      - type: notify
+        template: default
+        subject: "AWS Policy Violation: All EC2 instances require an instance profile, as a courtesy we have done this for you."
+        to:
+          - event-owner
+        transport:
+          type: sqs
+          queue: https://sqs.us-west-1.amazonaws.com/524564751780/surf-custodian

@@ -1,0 +1,14 @@
+policies:
+  - name: owner-autotagging-on_instance_creation
+    resource: ec2
+    mode:
+        role: arn:aws:iam::524564751780:role/TejaswiRole
+        type: cloudtrail
+        events:
+          - RunInstances
+    filters:
+      - tag:owner: absent
+    actions:
+      - type: auto-tag-user
+        tag: owner
+        principal_id_tag: CreatorId 

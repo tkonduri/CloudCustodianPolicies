@@ -1,0 +1,7 @@
+policies:
+  - name: tejaswi-policy
+    resource: ec2
+    filters:
+      - "tag:Custodian": present
+    actions:
+      - stop

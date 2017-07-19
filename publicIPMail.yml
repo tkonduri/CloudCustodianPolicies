@@ -1,0 +1,30 @@
+policies:
+  - name: custodian_public_ip_check
+    resource: ec2
+    mode:
+        role: arn:aws:iam::524564751780:role/TejaswiRole
+        type: ec2-instance-state
+        events:
+          - pending
+          - running
+          - stopping
+    filters:
+      - type: value
+        key: PublicIpAddress
+        op: ne
+        value: null
+    actions:
+      - stop
+      - type: tag
+        key: custodian_public_ip_check
+        value: “surf-custodian....Instance stopped due to PublicIpAddress not allowed (Mail)”
+      - type: notify
+        template: default
+        subject: "Custodian Test..."
+        body: "xyz"
+        to:
+          - iam-username
+          #- tejaswi.konduri@veritas.com
+        transport:
+          type: sqs
+          queue: https://sqs.us-west-2.amazonaws.com/524564751780/CustodianSQS
